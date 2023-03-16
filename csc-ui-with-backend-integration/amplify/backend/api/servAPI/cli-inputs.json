@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/serv": {
+      "name": "/serv",
+      "lambdaFunction": "servFunc",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

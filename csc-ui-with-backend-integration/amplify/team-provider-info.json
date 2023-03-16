@@ -1,0 +1,76 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-cscpoc-dev-144950-authRole",
+      "UnauthRoleArn": "arn:aws:iam::197729915410:role/amplify-cscpoc-dev-144950-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::197729915410:role/amplify-cscpoc-dev-144950-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-cscpoc-dev-144950-deployment",
+      "UnauthRoleName": "amplify-cscpoc-dev-144950-unauthRole",
+      "StackName": "amplify-cscpoc-dev-144950",
+      "StackId": "arn:aws:cloudformation:us-east-1:197729915410:stack/amplify-cscpoc-dev-144950/b77b9190-bf24-11ed-97f4-0aa8eb19cbe3",
+      "AmplifyAppId": "d14p1vxd63doch"
+    },
+    "categories": {
+      "function": {
+        "servFunc": {
+          "deploymentBucketName": "amplify-cscpoc-dev-144950-deployment",
+          "s3Key": "amplify-builds/servFunc-50647961445663613373-build.zip"
+        },
+        "vsdFunc": {
+          "deploymentBucketName": "amplify-cscpoc-dev-144950-deployment",
+          "s3Key": "amplify-builds/vsdFunc-33353031637531774f46-build.zip"
+        },
+        "servDb": {},
+        "vsdDb": {}
+      },
+      "storage": {
+        "spnDb": {},
+        "countryDb": {},
+        "servDb": {},
+        "vsdDb": {}
+      },
+      "api": {
+        "servAPI": {},
+        "vsdAPI": {}
+      }
+    }
+  },
+  "newenv": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-cscpoc-newenv-123749-authRole",
+      "UnauthRoleArn": "arn:aws:iam::534997684589:role/amplify-cscpoc-newenv-123749-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::534997684589:role/amplify-cscpoc-newenv-123749-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-cscpoc-newenv-123749-deployment",
+      "UnauthRoleName": "amplify-cscpoc-newenv-123749-unauthRole",
+      "StackName": "amplify-cscpoc-newenv-123749",
+      "StackId": "arn:aws:cloudformation:us-east-1:534997684589:stack/amplify-cscpoc-newenv-123749/451a7cc0-c3c9-11ed-929e-12d9009553ff",
+      "AmplifyAppId": "d3bjw2os8jfm8e"
+    },
+    "categories": {
+      "function": {
+        "servFunc": {
+          "deploymentBucketName": "amplify-cscpoc-newenv-123749-deployment",
+          "s3Key": "amplify-builds/servFunc-663230456a2f4b6a6b4c-build.zip"
+        },
+        "vsdFunc": {
+          "deploymentBucketName": "amplify-cscpoc-newenv-123749-deployment",
+          "s3Key": "amplify-builds/vsdFunc-33353031637531774f46-build.zip"
+        },
+        "servDb": {},
+        "vsdDb": {}
+      },
+      "api": {
+        "servAPI": {},
+        "vsdAPI": {}
+      },
+      "storage": {
+        "countryDb": {},
+        "servDb": {},
+        "spnDb": {},
+        "vsdDb": {}
+      }
+    }
+  }
+}

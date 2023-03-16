@@ -1,0 +1,10 @@
+{
+  "resourceName": "countryDb",
+  "tableName": "countryDb",
+  "partitionKey": {
+    "fieldName": "id",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

@@ -1,0 +1,10 @@
+{
+  "resourceName": "spnDb",
+  "tableName": "spnDb",
+  "partitionKey": {
+    "fieldName": "id",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

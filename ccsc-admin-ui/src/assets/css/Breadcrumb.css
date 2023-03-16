@@ -1,0 +1,13 @@
+.breadcrumbContainer {
+  height: 50px;
+  /* UI Properties */
+  background: #f2f8ff 0% 0% no-repeat padding-box;
+  opacity: 1;
+  padding-top: 10px;
+}
+
+.breadcrumbContainer a {
+  font: normal normal normal 14px/20px Gellix-Regular;
+  color: #000048;
+  text-decoration: none;
+}

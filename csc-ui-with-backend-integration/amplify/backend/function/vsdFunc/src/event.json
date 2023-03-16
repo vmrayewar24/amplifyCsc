@@ -1,0 +1,5 @@
+{
+    "body": "{'name':'SIP','category':'CTMS','servtype':'serv1'}",
+    "httpMethod":"POST",
+    "path":"/vsd"
+}

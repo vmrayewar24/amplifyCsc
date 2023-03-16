@@ -1,0 +1,118 @@
+{
+  "api": {
+    "servAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "servFunc"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "vsdAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "vsdFunc"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "function": {
+    "servFunc": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "servDb"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "vsdFunc": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "vsdDb"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_servFunc_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "servFunc"
+        }
+      ]
+    },
+    "AMPLIFY_function_servFunc_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "servFunc"
+        }
+      ]
+    },
+    "AMPLIFY_function_vsdFunc_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "vsdFunc"
+        }
+      ]
+    },
+    "AMPLIFY_function_vsdFunc_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "vsdFunc"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "countryDb": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
+    "servDb": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
+    "spnDb": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
+    "vsdDb": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    }
+  }
+}

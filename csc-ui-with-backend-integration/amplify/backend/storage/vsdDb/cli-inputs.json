@@ -1,0 +1,10 @@
+{
+  "resourceName": "vsdDb",
+  "tableName": "vsdDb",
+  "partitionKey": {
+    "fieldName": "id",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

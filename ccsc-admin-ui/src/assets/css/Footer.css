@@ -1,0 +1,13 @@
+.card-footer {
+  background: #f2f2f2 0% 0% no-repeat padding-box;
+}
+.footerLinks {
+  border-right: 1px solid #626262;
+  padding: 0px 8px;
+  font: normal normal normal 12px/12px Gellix-Regular;
+  color: #000048;
+}
+.copyRight {
+  font: normal normal normal 12px/18px Gellix-Regular;
+  color: #000048;
+}

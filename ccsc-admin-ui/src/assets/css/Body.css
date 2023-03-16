@@ -1,0 +1,14 @@
+.connectionRequestTable thead {
+  background: #f2f2f2 0% 0% no-repeat padding-box;
+  border-radius: 4px 4px 0px 0px;
+}
+
+
+.connectionRequestTable tbody tr {
+  border: 1px solid #dee2e6;
+}
+
+.connectionRequestTable tbody td {
+  font: normal normal normal 14px/18px Gellix-Regular;
+  color: #000048;
+}

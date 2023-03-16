@@ -1,0 +1,10 @@
+{
+  "resourceName": "servDb",
+  "tableName": "servDb",
+  "partitionKey": {
+    "fieldName": "id",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

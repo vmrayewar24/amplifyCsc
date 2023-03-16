@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "storage": {
+      "vsdDb": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
