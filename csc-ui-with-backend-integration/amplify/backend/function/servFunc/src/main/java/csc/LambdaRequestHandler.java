@@ -27,73 +27,82 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
 
-public class LambdaRequestHandler{
-	  
-	private static String tablename=System.getenv("STORAGE_SERVDB_NAME");
-    public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context){
-		Map<String , String>headers=new HashMap<>();
-        headers.put("Access-Control-Allow-Headers", "Content-Type");
-        headers.put("Access-Control-Allow-Origin", "*");    
-        headers.put("Access-Control-Allow-Methods", "OPTIONS,POST,GET");
-		APIGatewayProxyResponseEvent apiGatewayProxyResponseEvent=new APIGatewayProxyResponseEvent();
-		LambdaLogger lambdaLogger=context.getLogger();
-		Gson gson=new Gson();
-		try{
-			if(request.getHttpMethod().equals("GET") && request.getPath().equals("/serv")){
-				AmazonDynamoDB amazonDynamoDB=AmazonDynamoDBClientBuilder.standard().build();
-				ScanResult scanResult=amazonDynamoDB.scan(new ScanRequest().withTableName(tablename));
-				List<ResponseClass>veggies=scanResult.getItems().stream().map(
-					item->new ResponseClass(
-						item.get("id").getS(),
-						item.get("name").getS()
-					)
-				)
-				.collect(Collectors.toList());
-				return apiGatewayProxyResponseEvent.withBody(gson.toJson(veggies)).withStatusCode(200).withHeaders(headers);
+import csc.customexception.InvalidJSON;
+import csc.customexception.NoDataToShow;
+
+public class LambdaRequestHandler {
+	private APIGatewayProxyResponseEvent apiGatewayProxyResponseEvent = new APIGatewayProxyResponseEvent();
+	private static Map<String, String> headers = new HashMap<>();
+	private Gson gson = new Gson();
+	private static String tablename = System.getenv("STORAGE_SERVDB_NAME");
+	private AmazonDynamoDB amazonDynamoDB = AmazonDynamoDBClientBuilder.standard().build();
+	
+	private DynamoDB dynamoDB = new DynamoDB(AmazonDynamoDBClientBuilder.standard().build());
+	private Table table = dynamoDB.getTable(tablename);
+	static {
+		headers.put("Access-Control-Allow-Headers", "Content-Type");
+		headers.put("Access-Control-Allow-Origin", "*");
+		headers.put("Access-Control-Allow-Methods", "OPTIONS,POST,GET");
+	}
+
+	public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
+		LambdaLogger lambdaLogger = context.getLogger();
+		try {
+			if (request.getHttpMethod().equals("GET") && request.getPath().equals("/serv")) {
+				ScanResult scanResult = amazonDynamoDB.scan(new ScanRequest().withTableName(tablename));
+				List<ResponseClass> services = scanResult.getItems().stream()
+						.map(item -> new ResponseClass(item.get("id").getS(), item.get("name").getS()))
+						.collect(Collectors.toList());
+				if(services.size()==0) {
+					throw new NoDataToShow("No Data to show");
+				}
+				return apiGatewayProxyResponseEvent.withBody(gson.toJson(services)).withStatusCode(200)
+						.withHeaders(headers);
 			}
-			if(request.getHttpMethod().equals("POST") && request.getPath().equals("/serv")){
-				RequestClass veggie=gson.fromJson(request.getBody(),RequestClass.class);
-				DynamoDB dynamoDB=new DynamoDB(AmazonDynamoDBClientBuilder.standard().build());
-				Table table=dynamoDB.getTable(tablename);
-				Item item=new Item().withPrimaryKey("id", UUID.randomUUID().toString())
-									.withString("name", veggie.getName());
+			if (request.getHttpMethod().equals("POST") && request.getPath().equals("/serv")) {
+				if(request.getBody()==null || request.getBody().isEmpty()) {
+					throw new InvalidJSON("Please give some input");
+				}
+				RequestClass service = gson.fromJson(request.getBody(), RequestClass.class);
+				Item item = new Item().withPrimaryKey("id", UUID.randomUUID().toString()).withString("name",
+						service.getName());
 				table.putItem(item);
-				return apiGatewayProxyResponseEvent.withBody(gson.toJson(veggie.getName()+" Added successfully")).withStatusCode(200).withHeaders(headers);
+				return apiGatewayProxyResponseEvent.withBody(gson.toJson(service.getName() + " Added successfully"))
+						.withStatusCode(201).withHeaders(headers);
 			}
-			if(request.getHttpMethod().equals("PUT") && request.getPath().equals("/serv")){
-				RequestClass veggie=gson.fromJson(request.getBody(),RequestClass.class);
-				DynamoDB dynamoDB=new DynamoDB(AmazonDynamoDBClientBuilder.standard().build());
-				Table table=dynamoDB.getTable(tablename);
-				Map<String,String>expressionAttributeNames=new HashMap<>();
+			if (request.getHttpMethod().equals("PUT") && request.getPath().equals("/serv")) {
+				if(request.getBody()==null || request.getBody().isEmpty()) {
+					throw new InvalidJSON("Please give some input");
+				}
+				RequestClass service = gson.fromJson(request.getBody(), RequestClass.class);
+				Map<String, String> expressionAttributeNames = new HashMap<>();
 				expressionAttributeNames.put("#N", "name");
-				Map<String,Object>expressionAttributeValues=new HashMap<>();
-				expressionAttributeValues.put(":ValN",veggie.getName());
-				table.updateItem("id", veggie.getId(),
-				 "SET #N=:ValN",expressionAttributeNames,expressionAttributeValues);
-				return apiGatewayProxyResponseEvent.withBody(gson.toJson(veggie.getName()+" updated")).withStatusCode(200);
+				Map<String, Object> expressionAttributeValues = new HashMap<>();
+				expressionAttributeValues.put(":ValN", service.getName());
+				table.updateItem("id", service.getId(), "SET #N=:ValN", expressionAttributeNames,
+						expressionAttributeValues);
+				return apiGatewayProxyResponseEvent.withBody(gson.toJson(service.getName() + " updated"))
+						.withStatusCode(201);
 			}
-			if(request.getHttpMethod().equals("DELETE") && request.getPath().equals("/serv")){
-				RequestClass veggie=gson.fromJson(request.getBody(),RequestClass.class);
-				DynamoDB dynamoDB=new DynamoDB(AmazonDynamoDBClientBuilder.standard().build());
-				Table table=dynamoDB.getTable(tablename);
-				table.deleteItem("id", veggie.getId());
-				return apiGatewayProxyResponseEvent.withBody(gson.toJson(veggie.getName()+" deleted")).withStatusCode(200);
+			if (request.getHttpMethod().equals("DELETE") && request.getPath().equals("/serv")) {
+				if(request.getBody().equals(null)) {
+					throw new InvalidJSON("Please give some input");
+				}
+				RequestClass service = gson.fromJson(request.getBody(), RequestClass.class);
+				table.deleteItem("id", service.getId());
+				return apiGatewayProxyResponseEvent.withBody(gson.toJson(service.getName() + " deleted"))
+						.withStatusCode(200);
 			}
-			if(request.getHttpMethod().equals("GET") && request.getResource().equals("/serv/{proxy+}")){
-				String veggieId=request.getPathParameters().get("proxy");
-				DynamoDB dynamoDB=new DynamoDB(AmazonDynamoDBClientBuilder.standard().build());
-				Table table=dynamoDB.getTable(tablename);
-				Item item=table.getItem("id",veggieId);
-				ResponseClass veggieout=new ResponseClass(
-					item.getString("id"),
-					item.getString("name")
-				);
-				return apiGatewayProxyResponseEvent.withBody(gson.toJson(veggieout)).withStatusCode(200).withHeaders(headers);
+			if (request.getHttpMethod().equals("GET") && request.getResource().equals("/serv/{proxy+}")) {
+				String serviceId = request.getPathParameters().get("proxy");
+				Item item = table.getItem("id", serviceId);
+				ResponseClass serviceout = new ResponseClass(item.getString("id"), item.getString("name"));
+				return apiGatewayProxyResponseEvent.withBody(gson.toJson(serviceout)).withStatusCode(200)
+						.withHeaders(headers);
 			}
-		}catch(Exception e){
-			lambdaLogger.log("General Exception "+e);
+		} catch (Exception e) {
+			lambdaLogger.log("General Exception " + e);
 		}
-		// return apiGatewayProxyResponseEvent.withHeaders(headers).withBody("resource not found");
-		return null;
-    }
+		return apiGatewayProxyResponseEvent.withHeaders(headers).withBody("resource not found").withStatusCode(500);
+	}
 }
